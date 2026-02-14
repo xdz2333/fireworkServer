@@ -1,0 +1,370 @@
+/* 彻底极简 —— 只保留必需布局 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1e1e1e;
+    /* 深灰背景，突出canvas黑色 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 画布：纯黑背景，无边框，无圆角，无阴影 */
+canvas {
+    display: block;
+    /* 移除行内间隙 */
+    background-color: #000000;
+    /* 纯黑 */
+    border: none;
+    outline: none;
+    width: auto;
+    /* 宽度由JS设置的像素决定，这里仅作降级 */
+    height: auto;
+    box-shadow: none;
+}
+
+.danmu-wrapper {
+    align-items: center;
+    display: flex;
+    width: 100%;
+}
+
+/* 弹幕条 —— 完全参考B站发送框风格: 灰底圆角，内部简洁 */
+.danmu-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 20px auto 30px auto;
+    /* 与画布保持间距，下方留呼吸空间 */
+    border-radius: 30px;
+    /* 高圆角，胶囊形状 */
+    padding: 2px;
+    /* 细边内缩，让内部输入框贴近 */
+    max-width: 800px;
+    /* 参考B站输入框宽度，不要过长 */
+    box-shadow: none;
+}
+
+/* 输入框 —— 无边框，内缩，字体清晰 */
+.danmu-input {
+    flex: 1;
+    background: #f0f2f4;;
+    /* 完全透出父级背景色 */
+    border: 1px solid #d0d4da;
+    outline: none;
+    padding: 12px 20px;
+    font-size: 15px;
+    color: #222;
+    line-height: 1.4;
+    border-radius: 30px;
+    /* 圆角过渡自然 */
+    caret-color: #00aeec;
+    /* 光标蓝色，B站风格 */
+    letter-spacing: 0.3px;
+}
+
+.danmu-input:focus {
+    border-color: #00aeec;
+    background-color: #ffffff;
+}
+
+.danmu-input::placeholder {
+    color: #99a2aa;
+    /* 中灰色占位文字 */
+    font-weight: 400;
+    font-size: 14px;
+}
+
+/* 提交按钮 —— 蓝底白字，右侧圆角胶囊 */
+.danmu-submit {
+    background-color: #00aeec;
+    /* B站蓝 */
+    border: none;
+    border-radius: 30px;
+    padding: 0 24px;
+    height: 40px;
+    margin: 2px;
+    /* 与父容器边缘微距 */
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    border: none;
+    cursor: default;
+    /* 无JS，只是静态展示 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: none;
+    white-space: nowrap;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+/* 极简降级：如果canvas尺寸超出小屏，允许滚动，但不破坏margin */
+@media (max-width: 600px) {
+    .danmu-bar {
+        max-width: 100%;
+    }
+}
+
+.comment-section {
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.06);
+    padding: 24px 26px 32px 26px;
+}
+
+/* 标题区：b站风格 · 评论数 */
+.comment-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.comment-title h3 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #18191c;
+    letter-spacing: 0.2px;
+}
+
+.comment-title span {
+    color: #9499a0;
+    font-size: 14px;
+    margin-left: 10px;
+    font-weight: 400;
+}
+
+/* ----- 输入区域：左三分之一（复选框+匿名+昵称框） + 右三分之二（弹幕框） ----- */
+.comment-input-area {
+    display: flex;
+    gap: 16px;
+    /* 左右间距 */
+    margin-bottom: 28px;
+    align-items: flex-start;
+    /* 顶部对齐 */
+}
+
+/* 左侧面板：宽度约占1/3 (用flex分配) */
+.left-panel {
+    flex: 1.2;
+    /* 相对比例，使总宽接近1/3 : 2/3 */
+    background-color: #f6f7f8;
+    border-radius: 14px;
+    padding: 14px 16px 16px 16px;
+    border: 1px solid #e3e5e7;
+}
+
+/* 匿名复选框 + “匿名发送” 行 */
+.anonymous-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    /* 与昵称框间距 */
+    cursor: default;
+}
+
+.anonymous-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    accent-color: #00aeec;
+}
+
+.anonymous-row label {
+    font-size: 15px;
+    color: #2c2f34;
+    font-weight: 450;
+    letter-spacing: 0.3px;
+    cursor: default;
+    user-select: none;
+}
+
+/* 昵称输入框 */
+.nickname-input {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #d0d4da;
+    border-radius: 24px;
+    /* b站小圆角 */
+    padding: 12px 18px;
+    font-size: 14px;
+    color: #18191c;
+    outline: none;
+    transition: 0.1s;
+    box-shadow: none;
+}
+
+.nickname-input::placeholder {
+    color: #b5b9c2;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.nickname-input:focus {
+    border-color: #00aeec;
+}
+
+/* 右侧弹幕输入框：占2/3 */
+.right-panel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 2.2;
+    /* 大约是左面板的两倍，达到右2/3 */
+}
+
+.danmaku-input {
+    width: 100%;
+    background-color: #f6f7f8;
+    border-radius: 30px;
+    padding: 15px 22px;
+    font-size: 15px;
+    color: #18191c;
+    outline: none;
+    transition: 0.1s;
+    box-shadow: none;
+    border: 1px solid #d0d4da;
+}
+
+.danmaku-input:focus {
+    border-color: #00aeec;
+    background-color: #ffffff;
+}
+
+.danmaku-input::placeholder {
+    color: #b5b9c2;
+    font-size: 15px;
+}
+
+/* 分割装饰线 (极细) */
+.divider {
+    height: 1px;
+    background: #eef0f2;
+    margin: 24px 0 20px 0;
+}
+
+/* ---------- 评论列表 (b站经典风格) ---------- */
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+/* 单条评论项 */
+.comment-item {
+    display: flex;
+    gap: 16px;
+}
+
+/* 头像占位（无图片，仅灰色圆形） */
+.avatar {
+    width: 48px;
+    height: 48px;
+    background-color: #e7e9ed;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid #dadfe6;
+}
+
+/* 评论主体 */
+.comment-content {
+    flex: 1;
+}
+
+/* 元信息行：昵称 + 匿名标记 + 时间 + 楼层 */
+.comment-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    margin-bottom: 6px;
+}
+
+.comment-nickname {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e1f23;
+}
+
+.anonymous-badge {
+    background-color: #eef3f9;
+    color: #6d757f;
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 30px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    border: 1px solid #d9dee6;
+}
+
+.comment-time {
+    font-size: 13px;
+    color: #99a2ab;
+}
+
+.comment-floor {
+    font-size: 13px;
+    color: #99a2ab;
+    margin-left: auto;
+    /* 靠右 */
+}
+
+/* 评论正文 */
+.comment-text {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #25282e;
+    margin-bottom: 10px;
+    word-break: break-word;
+    background-color: #fafbfc;
+    padding: 6px 0;
+}
+
+/* 点赞/回复 操作条（静态装饰） */
+.comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    color: #99a2ab;
+    font-size: 13px;
+}
+
+.action-like,
+.action-reply {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: default;
+}
+
+.action-like::before {
+    content: "👍";
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+.action-reply::before {
+    content: "💬";
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* 小屏幕适配：左右叠放 */
+@media (max-width: 640px) {
+    .comment-input-area {
+        flex-direction: column;
+    }
+
+    .left-panel,
+    .right-panel {
+        width: 100%;
+    }
+}

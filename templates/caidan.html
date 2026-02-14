@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小彩蛋</title>
+    <script src="../static/gl-matrix-min.js"></script>
+    <script src="../static/glm.js"></script>
+    <script src="../static/fireworkLite.js"></script>
+</head>
+
+<body onload="onload()">
+    <!-- 画布容器：只做居中，无任何额外装饰 -->
+    <canvas id="canvas-gl" width="640" height="360" style="position: absolute; top: 0; left: 0; z-index: -1;"></canvas>
+    <canvas id="canvas-2d" width="640" height="360"
+        style="position: absolute; top: 0; left: 0; z-index: 1; background:rgba(0,0,0,0);"></canvas>
+    <img id="placeholder" width="640" height="360"><img />
+</body>
+
+</html>

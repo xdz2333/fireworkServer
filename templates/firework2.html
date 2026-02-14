@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单身节快乐</title>
+    <script src="../static/gl-matrix-min.js"></script>
+    <script src="../static/glm.js"></script>
+    <script src="../static/firework.js"></script>
+    <script src="../static/utils.js"></script>
+    <link href="../static/style.css" rel="stylesheet">
+    <link href="../static/message.css" rel="stylesheet">
+</head>
+
+<body onload="onload()">
+    <!-- 画布容器：只做居中，无任何额外装饰 -->
+    <canvas id="canvas-gl" width="640" height="360" style="position: absolute; top: 0; left: 0; z-index: -1;"></canvas>
+    <canvas id="canvas-2d" width="640" height="360"
+        style="position: absolute; top: 0; left: 0; z-index: 1; background:rgba(0,0,0,0);"></canvas>
+    <img id="placeholder" width="640" height="360"><img />
+    <!-- 弹幕输入框：纯B站风格，无任何花哨效果 -->
+    <div class="danmu-wrapper">
+        <div class="danmu-bar">
+            <input type="text" class="danmu-input" placeholder="发条弹幕吧～">
+            <button class="danmu-submit">发送</button>
+        </div>
+    </div>
+    <div class="comment-section">
+        <!-- 标题: 评论数 -->
+        <div class="comment-title">
+            <h3>评论</h3>
+            <span>{{commentNum}}条评论</span>
+        </div>
+
+        <form class="comment-input-area" onsubmit="submitComment(event)">
+            <input type="text" class="danmu-input" name="nickname" placeholder="请输入昵称，匿名请留空">
+            <input type="text" class="danmu-input" name="content" placeholder="发条评论吧">
+            <button class="danmu-submit" style="margin-left: 20px;" type="submit">发送</button>
+        </form>
+
+        <!-- 分割线 -->
+        <div class="divider"></div>
+
+        <!-- ========= 评论列表 ========= -->
+        <div class="comment-list"></div>
+    </div>
+</body>
+
+</html>

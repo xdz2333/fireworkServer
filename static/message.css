@@ -1,0 +1,26 @@
+.flash-messages {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 1001;
+    max-width: 400px;
+}
+
+.flash-message {
+    padding: 16px 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.flash-success { background: var(--success-light); color: var(--success); }
+.flash-error { background: #FEE2E2; color: var(--danger); }
+.flash-close { background: none; border: none; font-size: 20px; cursor: pointer; margin-left: 12px; }
